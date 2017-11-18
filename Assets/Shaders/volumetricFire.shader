@@ -21,6 +21,7 @@
 			
 			#include "UnityCG.cginc"
 
+			// https://github.com/ashima/webgl-noise
 			#include "noiseSimplex.cginc"
 
 			struct appdata
