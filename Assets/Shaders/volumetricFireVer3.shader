@@ -2,12 +2,12 @@
 {
 	Properties
 	{
-		_Freq("Frequency", Float) = 1
-		_Speed("Speed", Float) = 1
-		_Strength("Strength", Range(0, 1.0)) = 0.5
-		_DarkColor("Dark Color", Color) = (0, 0, 0, 1)
-		_LightColor("Light Color", Color) = (0.7, 0.5, 0, 1)
-		_ThirdColor("Third Color", Color) = (0.5, 0.5, 0, 1)
+		_Freq("Frequency", Float) = 4.4
+		_Speed("Speed", Float) = -1.96
+		_Strength("Strength", Range(0, 1.0)) = 0.347
+		_DarkColor("Dark Color", Color) = (1, 0, 0, 1)
+		_LightColor("Light Color", Color) = (0, 1, 1, 1)
+		_ThirdColor("Third Color", Color) = (0.066, 0.5647, 0, 1)
 		
 	}
 	SubShader
@@ -87,7 +87,7 @@
 				
 				float3 shapeOffset = float3(cos(_Time.y * _Speed * 0.1), _Time.y * _Speed * 0.5, cos(_Time.y * _Speed * 0.083 + 1) + 2);
 
-				for (int i = 0; i < STEPS * 1.44; i++)
+				for (int i = 0; i < STEPS * 1.73205; i++)
 				{
 					float detailSample = 1 - abs(snoise(np * _Freq) + snoise(np * _Freq * 2)) * 0.5;
 					float shapeSample = snoise((p + shapeOffset) * _Freq * 0.7) + snoise(p + shapeOffset * _Freq * 0.14 + float3(detailSample, detailSample, -detailSample));
@@ -98,9 +98,10 @@
 					float fireSample = (max(0.00, shapeSample - height + pow(1 - height * 7, 5) + min(detailSample, 0.0) * 2) - (max(detailSample - 0.8, 0.0) * 1.4));
 
 					fireSample = max(0.0, fireSample) * pow(_Strength, 2);
-
+					//if (distance(p, float3(0, 0, 0)) - 0.5 < 0.0) {
 					c.a += fireSample * 0.5;
-					c.rgb += (_LightColor + _ThirdColor) * fireSample * c.a;
+					//}
+					c.rgb += (_LightColor + _ThirdColor) * max(fireSample * c.a, 0.0);
 					//c.a += max(0.0, shapeSample - 0.5 - test / 7 + min(detailSample, 0.0) * 2);
 					//c.a += max(ns + min(shapeSample, 0.0) - test, 0.0); //max(ns, 0.0);//max(nsLow, 0.0);//
 					if (c.a >= 1.0 || abs(p.x) > 0.5027 || abs(p.y) > 0.5027 || abs(p.z) > 0.5027) {
