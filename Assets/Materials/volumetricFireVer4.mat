@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: volumetricFireVer3
+  m_Name: volumetricFireVer4
   m_Shader: {fileID: 4800000, guid: 9196c4307ab211f468e46b1988c11939, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
