@@ -71,12 +71,12 @@ Material:
     - _SpecularHighlights: 1
     - _Speed: -1.96
     - _SrcBlend: 1
-    - _Strength: 0.303
+    - _Strength: 0.347
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DarkColor: {r: 0.72794116, g: 0, b: 0, a: 1}
+    - _DarkColor: {r: 1, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LightColor: {r: 0.72794116, g: 0.72794116, b: 0.72794116, a: 1}
-    - _ThirdColor: {r: 0.12631845, g: 0.3455882, b: 0, a: 1}
+    - _LightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ThirdColor: {r: 0.06637945, g: 0.5661765, b: 0, a: 1}

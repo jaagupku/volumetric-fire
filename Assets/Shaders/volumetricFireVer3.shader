@@ -15,7 +15,7 @@
 		Tags { "Queue" = "Transparent" }
 		LOD 100
 
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend SrcAlpha One
 
 		Pass
 		{
@@ -80,29 +80,27 @@
 
 			fixed4 raymarch(float3 start, float3 direction, float4 srcPos)
 			{
-				fixed4 c = fixed4(1, 1, 1, 0);
+				fixed4 c = fixed4(_DarkColor.rgb, 0);
 				float3 p = start;
 				float4 np = srcPos;
 				float3 direcionStep = direction * STEP_SIZE;
-				float detailSample = 0;
-
-				c.rgb = _DarkColor;
 				
-				float3 shapeOffset = float3(cos(_Time.y * _Speed / 10), _Time.y * _Speed / 2, cos(_Time.y * _Speed / 12 + 1) + 2);
+				float3 shapeOffset = float3(cos(_Time.y * _Speed * 0.1), _Time.y * _Speed * 0.5, cos(_Time.y * _Speed * 0.083 + 1) + 2);
 
 				for (int i = 0; i < STEPS * 1.44; i++)
 				{
-					detailSample = 1 - abs(snoise(np * _Freq) * 0.5 + snoise(np * _Freq * 2) * 0.5);
-					float shapeSample = snoise((p + shapeOffset) * _Freq * 0.7) * 4 + snoise(p + shapeOffset * _Freq * 0.14 + float3(detailSample, detailSample, detailSample)) * 4;
-					shapeSample = remap(shapeSample, -8, 8, 0.0, 1.0);
-					float test = max(p.y * 2 + 1, 0.0) / 7;
+					float detailSample = 1 - abs(snoise(np * _Freq) + snoise(np * _Freq * 2)) * 0.5;
+					float shapeSample = snoise((p + shapeOffset) * _Freq * 0.7) + snoise(p + shapeOffset * _Freq * 0.14 + float3(detailSample, detailSample, -detailSample));
 
-					float fireSample = (max(0.00, shapeSample - 0.5 - test + pow(1 - test * 7, 5) + min(detailSample, 0.0) * 2) - (max(detailSample - 0.8, 0.0) * 1.4)) * _Strength;
+					shapeSample = remap(shapeSample, -2, 2, -0.5, 0.5);
+					float height = max(p.y * 2 + 1, 0.0) * 0.143;
 
-					fireSample = max(0.0, fireSample);
+					float fireSample = (max(0.00, shapeSample - height + pow(1 - height * 7, 5) + min(detailSample, 0.0) * 2) - (max(detailSample - 0.8, 0.0) * 1.4));
 
-					c.rgb += _LightColor * fireSample * c.a + _ThirdColor * fireSample * c.a;
+					fireSample = max(0.0, fireSample) * pow(_Strength, 2);
+
 					c.a += fireSample * 0.5;
+					c.rgb += (_LightColor + _ThirdColor) * fireSample * c.a;
 					//c.a += max(0.0, shapeSample - 0.5 - test / 7 + min(detailSample, 0.0) * 2);
 					//c.a += max(ns + min(shapeSample, 0.0) - test, 0.0); //max(ns, 0.0);//max(nsLow, 0.0);//
 					if (c.a >= 1.0 || abs(p.x) > 0.5027 || abs(p.y) > 0.5027 || abs(p.z) > 0.5027) {
@@ -111,13 +109,7 @@
 					p += direcionStep;
 					np += float4(direcionStep, 0.0);
 				}
-				float ns = pow(clamp(detailSample / 2 + 0.5f, 0.0, 1.0), 2);
-
-				//float w1 = pow(1 - ns, 2);
-				//float w2 = 2 * ns * (1 - ns);
-				//float w3 = pow(ns, 2);
-				//c.rgb = _DarkColor * w1 + _ThirdColor * w2 + _LightColor * w3;
-				c.a = clamp(c.a, 0.0, 1.0);
+				c = clamp(c, 0.0, 1.0);
 				return c;
 			}
 			
@@ -131,7 +123,7 @@
 				float4 srcPos = float4(i.localPos.x + cos(_Time.y * _Speed) * 0.1,
 									   i.localPos.y + (_Time.y * _Speed * 2.5) / _Freq,
 									   i.localPos.z + cos(_Time.y * _Speed / 1.1 + 1) * 0.1 + 2,
-									   _Time.y * _Speed * 0.1);
+									   _Time.y * _Speed * 0.15);
 				return raymarch(i.localPos, normalize(i.wPos - _WorldSpaceCameraPos), srcPos);
 			}
 			ENDCG
