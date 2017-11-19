@@ -55,6 +55,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _Alpha: 0.47
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -67,16 +68,17 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ParticleAlpha: 0.57
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: -1.96
+    - _Speed: -1.9
     - _SrcBlend: 1
-    - _Strength: 0.347
+    - _Strength: 0.56
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DarkColor: {r: 1, g: 0, b: 0, a: 1}
+    - _DarkColor: {r: 0.9852941, g: 0.41070578, b: 0.26081315, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ThirdColor: {r: 0.06637945, g: 0.5661765, b: 0, a: 1}
+    - _LightColor: {r: 0.9264706, g: 0.81066173, b: 0.81066173, a: 1}
+    - _ThirdColor: {r: 0.51621234, g: 0.6102941, b: 0.18398571, a: 0}

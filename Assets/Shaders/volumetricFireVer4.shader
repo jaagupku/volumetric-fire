@@ -5,6 +5,7 @@
 		_Freq("Frequency", Float) = 1
 		_Speed("Speed", Float) = 1
 		_Strength("Strength", Range(0, 1.0)) = 0.5
+		_ParticleAlpha("Per Particle Alpha", Range(0,1.0)) = 0.5
 		_DarkColor("Dark Color", Color) = (0, 0, 0, 1)
 		_LightColor("Light Color", Color) = (0.7, 0.5, 0, 1)
 		_ThirdColor("Third Color", Color) = (0.5, 0.5, 0, 1)
@@ -15,7 +16,10 @@
 		Tags { "Queue" = "Transparent" }
 		LOD 100
 
+		Cull Off
 		Blend SrcAlpha One
+		ZTest Always
+		
 
 		Pass
 		{
@@ -44,7 +48,8 @@
 			uniform float
 				_Freq,
 				_Speed,
-				_Strength
+				_Strength,
+				_ParticleAlpha
 			;
 
 			uniform fixed4
@@ -99,8 +104,12 @@
 
 					fireSample = max(0.0, fireSample) * pow(_Strength, 2);
 
-					c.a += fireSample * 0.5;
+					c.a += fireSample * _ParticleAlpha;
 					c.rgb += (_LightColor + _ThirdColor) * fireSample * c.a ;
+
+					
+				//	c.rgb += mad(_Time, 2.0, -0,5) / 255;
+					
 					//c.a += max(0.0, shapeSample - 0.5 - test / 7 + min(detailSample, 0.0) * 2);
 					//c.a += max(ns + min(shapeSample, 0.0) - test, 0.0); //max(ns, 0.0);//max(nsLow, 0.0);//
 					if (c.a >= 1.0 || abs(p.x) > 0.5027 || abs(p.y) > 0.5027 || abs(p.z) > 0.5027) {
@@ -128,6 +137,8 @@
 				return raymarch(i.localPos, normalize(i.wPos - _WorldSpaceCameraPos), srcPos);
 			}
 			ENDCG
+
 		}
+
 	}
 }
