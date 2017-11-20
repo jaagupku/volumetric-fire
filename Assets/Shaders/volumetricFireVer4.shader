@@ -100,7 +100,7 @@
 					shapeSample *= 0.25; //remap(shapeSample, -2, 2, -0.5, 0.5);
 					float height = max(p.y * 2 + 1, 0.0) * 0.143;
 
-					float fireSample = (max(0.00, shapeSample - height + pow(1 - height * 7, 5) + min(detailSample, 0.0) * 2) - (max(detailSample - 0.8, 0.0) * 1.4));
+					float fireSample = (max(0.00, shapeSample - height * 1.25  + max(0.0, pow(1 - height * 7, 5))) - (max(detailSample - 0.8, 0.0) * 1.4));
 
 					fireSample = max(0.0, fireSample) * pow(_Strength, 2);
 
