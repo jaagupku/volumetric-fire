@@ -4,11 +4,12 @@
 	{
 		_Freq("Frequency", Float) = 4.4
 		_Speed("Speed", Float) = -1.96
-		_Strength("Strength", Range(0, 1.0)) = 0.347
-		_ParticleAlpha("Per Particle Alpha", Range(0,1.0)) = 0.5
+		_Strength("Strength", Range(0, 1.0)) = 0.345
+		_ParticleAlpha("Per Particle Alpha", Range(0, 128.0)) = 64.0
 		_DarkColor("Dark Color", Color) = (1, 0, 0, 1)
 		_LightColor("Light Color", Color) = (0, 1, 1, 1)
 		_ThirdColor("Third Color", Color) = (0.066, 0.5647, 0, 1)
+		_Steps("Steps", Int) = 128
 		
 	}
 	SubShader
@@ -58,8 +59,10 @@
 				_ThirdColor
 			;
 
-			#define STEPS 128
-			#define STEP_SIZE 1.0 / STEPS
+			uniform int _Steps;
+
+			//#define STEPS 128
+			#define STEP_SIZE 1.0 / _Steps
 			
 			v2f vert (appdata v)
 			{
@@ -92,7 +95,7 @@
 				
 				float3 shapeOffset = float3(cos(_Time.y * _Speed * 0.1), _Time.y * _Speed * 0.5, cos(_Time.y * _Speed * 0.083 + 1) + 2);
 
-				for (int i = 0; i < STEPS * 1.73205; i++)
+				for (int i = 0; i < _Steps * 1.73205; i++)
 				{
 					float detailSample = 1 - abs(snoise(np * _Freq) + snoise(np * _Freq * 2)) * 0.5;
 					float shapeSample = snoise((p + shapeOffset) * _Freq * 0.7) + snoise(p + shapeOffset * _Freq * 0.14 + float3(detailSample, detailSample, -detailSample));
@@ -104,8 +107,8 @@
 
 					fireSample = max(0.0, fireSample) * pow(_Strength, 2);
 
-					c.a += fireSample * _ParticleAlpha;
-					c.rgb += (_LightColor + _ThirdColor) * fireSample * c.a ;
+					c.a += fireSample * _ParticleAlpha * STEP_SIZE;
+					c.rgb += (_LightColor + _ThirdColor) * fireSample * c.a * STEP_SIZE;
 
 					
 				//	c.rgb += mad(_Time, 2.0, -0,5) / 255;

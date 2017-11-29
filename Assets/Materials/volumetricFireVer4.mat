@@ -68,12 +68,13 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ParticleAlpha: 0.706
+    - _ParticleAlpha: 22.2
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _Speed: -1.9
     - _SrcBlend: 1
-    - _Strength: 0.637
+    - _Steps: 128
+    - _Strength: 0.633
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
