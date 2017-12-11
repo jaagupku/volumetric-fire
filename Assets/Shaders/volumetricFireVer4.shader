@@ -10,6 +10,7 @@
 		_LightColor("Light Color", Color) = (0, 1, 1, 1)
 		_ThirdColor("Third Color", Color) = (0.066, 0.5647, 0, 1)
 		_Steps("Steps", Int) = 128
+		_RandomOffset("Random Offset Alpha", Range(0, 1)) = 1
 		
 	}
 	SubShader
@@ -50,7 +51,8 @@
 				_Freq,
 				_Speed,
 				_Strength,
-				_ParticleAlpha
+				_ParticleAlpha,
+				_RandomOffset
 			;
 
 			uniform fixed4
@@ -80,6 +82,16 @@
 				return o;
 			}
 
+			float rand(float2 co) {
+				float a = 12.9898;
+				float b = 78.233;
+				float c = 43758.5453;
+				float dt = dot(co.xy, float2(a, b));
+				float sn = fmod(dt, 3.14);
+
+				return 2.0 * frac(sin(sn) * c) - 1.0;
+			}
+
 			// Remaps value from one range to other range, e.g. 0.2 from range (0.0, 0.4) to range (0.0, 1.0) becomes 0.5 
 			float remap(float value, float original_min, float original_max, float new_min, float new_max)
 			{
@@ -92,6 +104,10 @@
 				float3 p = start;
 				float4 np = srcPos;
 				float3 direcionStep = direction * STEP_SIZE;
+
+				float3 randomOffset = direcionStep * abs(rand(_Time.yz + start.xy)) * _RandomOffset;
+				p += randomOffset;
+				np += float4(randomOffset, 0.0);
 				
 				float3 shapeOffset = float3(cos(_Time.y * _Speed * 0.1), _Time.y * _Speed * 0.5, cos(_Time.y * _Speed * 0.083 + 1) + 2);
 
