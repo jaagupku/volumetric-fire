@@ -8,7 +8,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: volumetricFireVer5
   m_Shader: {fileID: 4800000, guid: 64295de2a18e1a44686a0bf6fa31112a, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _DISTORTWITHDETAILNOISE_ON _RANDOMOFFSET_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -58,8 +58,14 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _DistortWithDetailNoise: 1
+    - _DistortionSpeed: 2
     - _DstBlend: 0
-    - _Freq: 4.9
+    - _FireFadeOutMultiplier: 1
+    - _FireFadeOutTreshold: 0.95
+    - _FireHeight: 0.204
+    - _FireShapeMultiplier: 0.273
+    - _Freq: 4.4
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -67,16 +73,19 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ParticleAlpha: 64
+    - _ParticleAlpha: 99.5
     - _RandomOffset: 1
-    - _SmokeHeight: 0.18
+    - _SmokeHeight: 0.173
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: -1.6
+    - _Speed: -1.9
     - _SrcBlend: 1
     - _Steps: 128
-    - _Strength: 0.75
+    - _Strength: 0.732
+    - _ThickFireHeight: 45
     - _UVSec: 0
+    - _UpwardsSpeed: 0.5
+    - _WobbleSpeed: 2.07
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
