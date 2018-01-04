@@ -59,7 +59,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DistortWithDetailNoise: 1
-    - _DistortionSpeed: 2
+    - _DistortionSpeed: 0.48
     - _DstBlend: 0
     - _FireFadeOutMultiplier: 1
     - _FireFadeOutTreshold: 0.95
@@ -73,18 +73,18 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ParticleAlpha: 99.5
+    - _ParticleAlpha: 85.8
     - _RandomOffset: 1
-    - _SmokeHeight: 0.173
+    - _SmokeHeight: 0.112
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: -1.9
+    - _Speed: -0.33
     - _SrcBlend: 1
-    - _Steps: 128
-    - _Strength: 0.732
+    - _Steps: 221
+    - _Strength: 0.381
     - _ThickFireHeight: 45
     - _UVSec: 0
-    - _UpwardsSpeed: 0.5
+    - _UpwardsSpeed: 0.95
     - _WobbleSpeed: 2.07
     - _ZWrite: 1
     m_Colors:
