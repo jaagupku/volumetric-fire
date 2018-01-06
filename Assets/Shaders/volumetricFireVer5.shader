@@ -6,7 +6,7 @@
 		_FireHeight("Fire Height", Range(0.0, 1.0)) = 0.143
 		_FireFadeOutTreshold("Fire Fadeout Treshold", Range(0.0, 3.0)) = 0.75
 		_FireShapeMultiplier("Fire Shape Multiplier", Range(0.0, 1.0)) = 0.25
-		_Freq("Frequency", Float) = 4.4
+		_Freq("Frequency", Range(0.0, 50.0)) = 4.4
 		[Toggle] _DistortWithDetailNoise("Distort with detail noise", Range(0.0, 1.0)) = 1.0
 
 
@@ -19,6 +19,7 @@
 		
 		[Header(Smoke)] _SmokeColor("Smoke Color", Color) = (0.5,0.5,0.5,1)
 		_SmokeHeight("Smoke Starting Height", Range(0,0.5)) = 0.05
+		_SmokeStrength("Smoke Strength", Range(0.0, 400.0)) = 200.0
 		
 
 		[Header(Animation)] _Speed("Overall Speed", Range(0.0, -3.0)) = -1.96
@@ -28,16 +29,15 @@
 
 
 		[Header(Rendering)] [IntRange] _Steps("Steps", Range(2, 256)) = 128
-		[Toggle] _RandomOffset("Random Offset Toggle", float) = 1
-		
-		
+		[Toggle] _RandomOffset("Random Offset Toggle", Range(0.0, 1.0)) = 1.0
+		[KeywordEnum(Off, Front, Back)] _Cull("Cull", Float) = 1.0
 	}
 	SubShader
 	{
 		Tags { "Queue" = "Transparent" }
 		LOD 100
         
-		Cull Back // Cull Back also provides some interesting results, but is more cartoonish (originally Cull Off)
+		Cull [_Cull] // Cull Back also provides some interesting results, but is more cartoonish (originally Cull Off)
 		Blend SrcAlpha One
 		ZTest Always
 		ZWrite Off
@@ -82,7 +82,8 @@
 				_UpwardsSpeed,
 				_DistortionSpeed,
 				_DistortWithDetailNoise,
-				_WobbleSpeed
+				_WobbleSpeed,
+				_SmokeStrength
 			;
 
 			uniform fixed4
@@ -94,7 +95,7 @@
 
 			uniform int _Steps;
 
-			#define STEP_SIZE 1.0 / _Steps
+			#define STEP_SIZE 1.73205 / _Steps
 			
 			v2f vert (appdata v)
 			{
@@ -151,33 +152,47 @@
 				return fireSample;
 			}
 
-			fixed4 raymarch(float4 start, float3 direction, float randomOffsetAmount)
+			// http://iquilezles.org/www/articles/distfunctions/distfunctions.htm
+			float sdBox(float3 p, float3 b)
 			{
+				float3 d = abs(p) - b;
+				return min(max(d.x, max(d.y, d.z)), 0.0) + length(max(d, 0.0));
+			}
+
+			fixed4 raymarch(float4 start, float4 direction, float randomOffsetAmount)
+			{
+				float stepSize = STEP_SIZE;
 				fixed4 c = fixed4(_DarkColor.rgb, 0);
 				float4 p = start;
-				float3 direcionStep = direction * STEP_SIZE;
+				float4 direcionStep = direction * stepSize;
 
-				float3 randomOffset = direcionStep * randomOffsetAmount;
-				p +=  float4(randomOffset, 0.0);
+				float4 randomOffset = direcionStep * randomOffsetAmount;
+				p +=  randomOffset;
 				
 				float4 timeOffset = float4(cos(_Time.x * _Speed * _WobbleSpeed), _Time.w * _Speed * _UpwardsSpeed / _Freq, cos(_Time.x * _Speed  * _WobbleSpeed * 0.9 + 1.0) + 2.0,  _Time.x * _Speed * _DistortionSpeed);
 
-				for (int i = 0; i < _Steps * 1.73205; i++)
+				for (int i = 0; i < _Steps; i++)
 				{
 					float height = max(p.y * 2 + 1, 0.0) * _FireHeight;
 					float fireSample = sampleFire(p + timeOffset, height);
 
-					c.a += fireSample * _ParticleAlpha * STEP_SIZE;
-					c.rgb += (_LightColor + _ThirdColor) * fireSample * STEP_SIZE; // this doesn't even seem to do anything
+					c.a += fireSample * _ParticleAlpha * stepSize;
+					//c.rgb += (_LightColor + _ThirdColor) * fireSample * stepSize; // this doesn't even seem to do anything
 
-                    c.rgb = lerp(c.rgb, _SmokeColor, height * _SmokeHeight); // change color based on height, maybe even could try multi colored gradients
+                    c.rgb = lerp(c.rgb, _SmokeColor, saturate(height * _SmokeHeight * stepSize * _SmokeStrength)); // change color based on height, maybe even could try multi colored gradients
 					
 				//	c.rgb += mad(_Time, 2.0, -0,5) / 255;
-					
-					if (c.a >= 1.0 || abs(p.x) > 0.5027 || abs(p.y) > 0.5027 || abs(p.z) > 0.5027) {
+#if 1 // 1 kasutab esimest if statementi, 0 kasutab teist. Enda testimisega jõudlus mõlemaga sama, ei suutnud märgatavat erinevust leida.
+					if (c.a >= 0.99 || abs(p.x) > 0.5027 || abs(p.y) > 0.5027 || abs(p.z) > 0.5027) {
 						break;
 					}
-					p += float4(direcionStep, 0.0);
+#else
+					if (c.a >= 0.99 || sdBox(p.xyz, float3(0.5, 0.5, 0.5)) > 0.0) {
+						break;
+					}
+#endif
+
+					p += direcionStep;
 				}
 				c = clamp(c, 0.0, 1.0);
 				return c;
@@ -199,7 +214,7 @@
 
 				float randomOffsetAmount = getRandomOffsetAmount(i.uv);
 
-				return raymarch(float4(i.localPos, 0.0), normalize(i.wPos - _WorldSpaceCameraPos), randomOffsetAmount);
+				return raymarch(float4(i.localPos, 0.0), float4(normalize(i.wPos - _WorldSpaceCameraPos), 0.0), randomOffsetAmount);
 			}
 			ENDCG
 
