@@ -8,7 +8,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: volumetricFireVer5
   m_Shader: {fileID: 4800000, guid: 64295de2a18e1a44686a0bf6fa31112a, type: 3}
-  m_ShaderKeywords: _DISTORTWITHDETAILNOISE_ON _RANDOMOFFSET_ON
+  m_ShaderKeywords: _CULL_BACK _DISTORTWITHDETAILNOISE_ON _OVERLAY_BACK _RANDOMOFFSET_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -56,15 +56,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
+    - _Cull: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DistortWithDetailNoise: 1
-    - _DistortionSpeed: 0.48
+    - _DistortionSpeed: 1.45
     - _DstBlend: 0
     - _FireFadeOutMultiplier: 1
-    - _FireFadeOutTreshold: 0.95
-    - _FireHeight: 0.204
-    - _FireShapeMultiplier: 0.273
+    - _FireFadeOutTreshold: 3
+    - _FireHeight: 0.22
+    - _FireShapeMultiplier: 0.776
     - _Freq: 4.4
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -72,25 +73,28 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _Overlay: 1
     - _Parallax: 0.02
     - _ParticleAlpha: 85.8
     - _RandomOffset: 1
-    - _SmokeHeight: 0.112
+    - _SmokeHeight: 0.13
+    - _SmokeStrength: 260
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: -0.33
+    - _Speed: -1.9
     - _SrcBlend: 1
-    - _Steps: 221
-    - _Strength: 0.381
-    - _ThickFireHeight: 45
+    - _Steps: 64
+    - _Strength: 1
+    - _StrengthMultiplier: 11
+    - _ThickFireHeight: 2
     - _UVSec: 0
-    - _UpwardsSpeed: 0.95
-    - _WobbleSpeed: 2.07
+    - _UpwardsSpeed: 0.63
+    - _WobbleSpeed: 2.99
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DarkColor: {r: 0.9264706, g: 0.64063656, b: 0.12943341, a: 1}
+    - _DarkColor: {r: 1, g: 0.5586206, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LightColor: {r: 0.9264706, g: 0.81066173, b: 0.81066173, a: 1}
+    - _LightColor: {r: 1, g: 0.9624746, b: 0.45588237, a: 1}
     - _SmokeColor: {r: 0.441, g: 0.445, b: 0.453, a: 1}
-    - _ThirdColor: {r: 0.5162123, g: 0.6102941, b: 0.18398568, a: 0}
+    - _ThirdColor: {r: 1, g: 0.39705884, b: 0.39705884, a: 0}

@@ -11,6 +11,7 @@
 
 
 		[Header(Fire Coloring)] _Strength("Strength", Range(0, 1.0)) = 0.345
+		_StrengthMultiplier("Strength Multiplier", Range(1.0, 30.0)) = 15.0
 		_ParticleAlpha("Per Particle Alpha", Range(0, 128.0)) = 64.0
 		_DarkColor("Dark Color", Color) = (1, 0, 0, 1)
 		_LightColor("Light Color", Color) = (0, 1, 1, 1)
@@ -83,7 +84,8 @@
 				_DistortionSpeed,
 				_DistortWithDetailNoise,
 				_WobbleSpeed,
-				_SmokeStrength
+				_SmokeStrength,
+				_StrengthMultiplier
 			;
 
 			uniform fixed4
@@ -171,16 +173,27 @@
 				
 				float4 timeOffset = float4(cos(_Time.x * _Speed * _WobbleSpeed), _Time.w * _Speed * _UpwardsSpeed / _Freq, cos(_Time.x * _Speed  * _WobbleSpeed * 0.9 + 1.0) + 2.0,  _Time.x * _Speed * _DistortionSpeed);
 
+				float transmittance = 1.0;
+
 				for (int i = 0; i < _Steps; i++)
 				{
 					float height = max(p.y * 2 + 1, 0.0) * _FireHeight;
 					float fireSample = sampleFire(p + timeOffset, height);
 
-					c.a += fireSample * _ParticleAlpha * stepSize;
-					//c.rgb += (_LightColor + _ThirdColor) * fireSample * stepSize; // this doesn't even seem to do anything
+					float4 particle = float4((_LightColor + _ThirdColor).rgb, fireSample);
 
-                    c.rgb = lerp(c.rgb, _SmokeColor, saturate(height * _SmokeHeight * stepSize * _SmokeStrength)); // change color based on height, maybe even could try multi colored gradients
-					
+					particle.rgb *= particle.a;
+
+					c = (1.0 - c.a) * particle * min(1.0, stepSize * _StrengthMultiplier) + c;
+					c.rgb = lerp(c.rgb, _SmokeColor, saturate(height * _SmokeHeight * stepSize * _SmokeStrength)); // change color based on height, maybe even could try multi colored gradients
+
+					// Old color way
+					//c.a += fireSample * _ParticleAlpha * stepSize;
+					//  //c.rgb += (_LightColor + _ThirdColor) * fireSample * stepSize; // this doesn't even seem to do anything
+
+					// c.rgb = lerp(c.rgb, _SmokeColor, saturate(height * _SmokeHeight * stepSize * _SmokeStrength)); // change color based on height, maybe even could try multi colored gradients
+
+
 				//	c.rgb += mad(_Time, 2.0, -0,5) / 255;
 #if 1 // 1 kasutab esimest if statementi, 0 kasutab teist. Enda testimisega jõudlus mõlemaga sama, ei suutnud märgatavat erinevust leida.
 					if (c.a >= 0.99 || abs(p.x) > 0.5027 || abs(p.y) > 0.5027 || abs(p.z) > 0.5027) {
