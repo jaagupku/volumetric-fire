@@ -32,6 +32,8 @@
 		[Header(Rendering)] [IntRange] _Steps("Steps", Range(2, 256)) = 128
 		[Toggle] _RandomOffset("Random Offset Toggle", Range(0.0, 1.0)) = 1.0
 		[KeywordEnum(Off, Front, Back)] _Cull("Cull", Float) = 1.0
+		[Enum(UnityEngine.Rendering.BlendMode)] _BlendSrc("Blend source mode", Float) = 5
+		[Enum(UnityEngine.Rendering.BlendMode)] _BlendDst("Blend destination mode", Float) = 1
 	}
 	SubShader
 	{
@@ -39,7 +41,7 @@
 		LOD 100
         
 		Cull [_Cull] // Cull Back also provides some interesting results, but is more cartoonish (originally Cull Off)
-		Blend SrcAlpha One
+		Blend [_BlendSrc] [_BlendDst]
 		ZTest Always
 		ZWrite Off
 		
@@ -173,8 +175,6 @@
 				
 				float4 timeOffset = float4(cos(_Time.x * _Speed * _WobbleSpeed), _Time.w * _Speed * _UpwardsSpeed / _Freq, cos(_Time.x * _Speed  * _WobbleSpeed * 0.9 + 1.0) + 2.0,  _Time.x * _Speed * _DistortionSpeed);
 
-				float transmittance = 1.0;
-
 				for (int i = 0; i < _Steps; i++)
 				{
 					float height = max(p.y * 2 + 1, 0.0) * _FireHeight;
@@ -207,7 +207,7 @@
 
 					p += direcionStep;
 				}
-				c = clamp(c, 0.0, 1.0);
+				// c = saturate(c);
 				return c;
 			}
 			
