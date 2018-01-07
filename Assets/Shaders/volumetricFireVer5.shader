@@ -18,6 +18,8 @@ Shader "Unlit/volumetricFireVer5"
 		_DarkColor("Dark Color", Color) = (1, 0, 0, 1)
 		_LightColor("Light Color", Color) = (0, 1, 1, 1)
 		_ThirdColor("Third Color", Color) = (0.066, 0.5647, 0, 1)
+		_Contrast("Contrast", Range(0.0, 2.0)) = 1.0
+		_Brightness("Brightness", Range(-1.0, 1.0)) = 0.0
 
 		
 		[Header(Smoke)] _SmokeColor("Smoke Color", Color) = (0.5,0.5,0.5,1)
@@ -89,7 +91,9 @@ Shader "Unlit/volumetricFireVer5"
 				_DistortWithDetailNoise,
 				_WobbleSpeed,
 				_SmokeStrength,
-				_StrengthMultiplier
+				_StrengthMultiplier,
+				_Brightness,
+				_Contrast
 			;
 
 			uniform fixed4
@@ -217,21 +221,27 @@ Shader "Unlit/volumetricFireVer5"
 			
 			fixed4 frag(v2f i) : SV_Target
 			{
-			
 				//float ns = snoise(i.srcPos) / 2 + 0.5f;
 				//return float4(ns, ns, ns, ns);
 				//float ns = pow(1 - max(i.localPos.y * 2 + 1, 0.0), 5);
 				//return float4(ns, ns, ns, 1.0);
 				//_Time.y = 0;
-
-				//float4 srcPos = float4(i.localPos.x + cos(_Time.x * _Speed),
-				//					   i.localPos.y + (_Time.w * _Speed * _UpwardsSpeed) / _Freq,
-				//					   i.localPos.z + cos(_Time.x * _Speed * 0.9 + 1.0)  + 2.0,
-				//					   _Time.x * _Speed * _DistortionSpeed);
-
 				float randomOffsetAmount = getRandomOffsetAmount(i.uv);
+				
+				float4 color = raymarch(float4(i.localPos, 0.0), float4(normalize(i.wPos - _WorldSpaceCameraPos), 0.0), randomOffsetAmount);
 
-				return raymarch(float4(i.localPos, 0.0), float4(normalize(i.wPos - _WorldSpaceCameraPos), 0.0), randomOffsetAmount);
+				// https://stackoverflow.com/questions/944713/help-with-pixel-shader-effect-for-brightness-and-contrast
+				//color.rgb /= color.a;
+				// Apply contrast.
+				color.rgb = ((color.rgb - 0.5f) * max(_Contrast, 0)) + 0.5f;
+
+				// Apply brightness.
+				color.rgb += _Brightness;
+
+				// Return final pixel color.
+				//color.rgb *= color.a;
+
+				return saturate(color);
 			}
 			ENDCG
 

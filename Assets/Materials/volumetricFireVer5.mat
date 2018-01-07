@@ -81,7 +81,7 @@ Material:
     - _ParticleAlpha: 85.8
     - _RandomOffset: 1
     - _SmokeHeight: 0.268
-    - _SmokeStrength: 86
+    - _SmokeStrength: 156
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _Speed: -1.9
