@@ -1,4 +1,6 @@
-﻿Shader "Unlit/volumetricFireVer5"
+﻿// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+
+Shader "Unlit/volumetricFireVer5"
 {
 	Properties
 	{
@@ -175,6 +177,8 @@
 				
 				float4 timeOffset = float4(cos(_Time.x * _Speed * _WobbleSpeed), _Time.w * _Speed * _UpwardsSpeed / _Freq, cos(_Time.x * _Speed  * _WobbleSpeed * 0.9 + 1.0) + 2.0,  _Time.x * _Speed * _DistortionSpeed);
 
+				float smokeLerpConstant = _SmokeHeight * stepSize * _SmokeStrength * saturate((1.0 - dot(direction.xyz, float3(0.0, 1.0, 0.0)))); // the dot product makes it so when looking from bottom or top, it looks correct.
+
 				for (int i = 0; i < _Steps; i++)
 				{
 					float height = max(p.y * 2 + 1, 0.0) * _FireHeight;
@@ -185,7 +189,7 @@
 					particle.rgb *= particle.a;
 
 					c = (1.0 - c.a) * particle * min(1.0, stepSize * _StrengthMultiplier) + c;
-					c.rgb = lerp(c.rgb, _SmokeColor, saturate(height * _SmokeHeight * stepSize * _SmokeStrength)); // change color based on height, maybe even could try multi colored gradients
+					c.rgb = lerp(c.rgb, _SmokeColor, saturate(height *smokeLerpConstant)); // change color based on height, maybe even could try multi colored gradients
 
 					// Old color way
 					//c.a += fireSample * _ParticleAlpha * stepSize;
