@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIController : MonoBehaviour {
+public class UIController : MonoBehaviour
+{
 
+	[SerializeField] private List<Shader> Shaders;
+	
 	// Use this for initialization
 	void Start () {
 		
