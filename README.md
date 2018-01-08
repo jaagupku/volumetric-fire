@@ -1,6 +1,8 @@
 # Volumetric Fire
 Project for Computer Graphics course by Jaagup Kuhi, Siim Raudsepp and Andri Poolakese  
 
+[Demo video](https://www.youtube.com/watch?v=I4KX9oESkQA)
+
 ## Quickstart guide
 
 1. Download and install [Unity](https://store.unity.com/) (tested on 2017.1.1 and 2017.2.0f3)
