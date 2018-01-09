@@ -27,7 +27,7 @@ Shader "Unlit/volumetricFireVer5"
 		_SmokeStrength("Smoke Strength", Range(0.0, 400.0)) = 200.0
 		
 
-		[Header(Animation)] _Speed("Overall Speed", Range(0.0, -3.0)) = -1.96
+		[Header(Animation)] _Speed("Overall Speed", Range(0.0, 3.0)) = 1.96
 		_UpwardsSpeed("Upwards Speed", Range(0.0, 2.0)) = 0.5
 		_WobbleSpeed("Sideways Wobble Speed", Range(0.0, 12.0)) = 1.0
 		_DistortionSpeed("Distortion Speed", Range(0.0, 4.0)) = 2.0
@@ -179,7 +179,7 @@ Shader "Unlit/volumetricFireVer5"
 				float4 randomOffset = direcionStep * randomOffsetAmount;
 				p +=  randomOffset;
 				
-				float4 timeOffset = float4(cos(_Time.x * _Speed * _WobbleSpeed), _Time.w * _Speed * _UpwardsSpeed / _Freq, cos(_Time.x * _Speed  * _WobbleSpeed * 0.9 + 1.0) + 2.0,  _Time.x * _Speed * _DistortionSpeed);
+				float4 timeOffset = float4(cos(_Time.x * -_Speed * _WobbleSpeed), _Time.w * -_Speed * _UpwardsSpeed / _Freq, cos(_Time.x * -_Speed  * _WobbleSpeed * 0.9 + 1.0) + 2.0,  _Time.x * -_Speed * _DistortionSpeed);
 
 				float smokeLerpConstant = _SmokeHeight * stepSize * _SmokeStrength * saturate((1.0 - dot(direction.xyz, float3(0.0, 1.0, 0.0)))); // the dot product makes it so when looking from bottom or top, it looks correct.
 

@@ -86,7 +86,7 @@ Material:
     - _SmokeStrength: 156
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: -1.9
+    - _Speed: 1.9
     - _SrcBlend: 1
     - _Steps: 48
     - _Strength: 1

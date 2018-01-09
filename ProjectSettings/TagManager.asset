@@ -3,7 +3,33 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - _FireHeight
+  - _FireFadeOutTreshold
+  - _FireShapeMultiplier
+  - _Freq
+  - _DistortWithDetailNoise
+  - _Strength
+  - _StrengthMultiplier
+  - _ParticleAlpha
+  - _DarkColor
+  - _LightColor
+  - _ThirdColor
+  - _Contrast
+  - _Brightness
+  - _SmokeColor
+  - _SmokeHeight
+  - _SmokeStrength
+  - _Speed
+  - _UpwardsSpeed
+  - _WobbleSpeed
+  - _DistortionSpeed
+  - _Steps
+  - _RandomOffset
+  - _Cull
+  - _BlendSrc
+  - _BlendDst
+  - _ThickFireHeight
   layers:
   - Default
   - TransparentFX
